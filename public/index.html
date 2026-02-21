@@ -15,6 +15,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <script src="https://unpkg.com/swup@4"></script>
+    <script defer src="assets/audioEngine.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -36,6 +38,18 @@
         }
     </script>
     <style>
+        /* Swup Cinematic Transitions */
+        .transition-fade {
+            transition: 0.5s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        html.is-animating .transition-fade {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
         .glass-header {
             background: rgba(15, 22, 35, 0.7);
             backdrop-filter: blur(12px);
@@ -346,7 +360,7 @@
             </div>
         </div>
     </header>
-    <main class="relative">
+    <main id="swup" class="transition-fade relative">
         <!-- Hero Section -->
         <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
             <div class="absolute inset-0 z-0">
@@ -967,6 +981,29 @@
             if (node01Element) node01Element.innerText = temp;
             if (node01DupElement) node01DupElement.innerText = temp;
         }, 3000);
+
+        // Swup and Audio Initialization
+        const swup = new Swup();
+
+        function initPageLogic() {
+            // Re-bind audio interactions on new elements
+            if (window.audioEngine) {
+                window.audioEngine.bindInteractions();
+            }
+        }
+
+        // Run on initial load and on every page transition
+        initPageLogic();
+        swup.hooks.on('page:view', initPageLogic);
+
+        // Global Audio Toggle (for floating access)
+        document.body.addEventListener('click', () => {
+            // Browsers require a gesture to start audio context
+            if (window.audioEngine && !window.audioEngine.initialized) {
+                window.audioEngine.enableAudio();
+            }
+        }, { once: true });
+
     </script>
 </body>
 

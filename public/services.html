@@ -15,6 +15,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <script src="https://unpkg.com/swup@4"></script>
+    <script defer src="assets/audioEngine.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -42,6 +44,18 @@
         }
     </script>
     <style>
+        /* Swup Cinematic Transitions */
+        .transition-fade {
+            transition: 0.5s;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        html.is-animating .transition-fade {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
         .glass-nav {
             background: rgba(15, 22, 35, 0.7);
             backdrop-filter: blur(12px);
@@ -101,7 +115,7 @@
             </div>
         </div>
     </header>
-    <main class="pt-20">
+    <main id="swup" class="transition-fade pt-20">
         <!-- Hero Section -->
         <section class="relative min-h-[80vh] flex items-center overflow-hidden">
             <div class="absolute inset-0 z-0">
@@ -435,6 +449,20 @@
                 });
             }
         });
+
+        // Swup and Audio Initialization
+        const swup = new Swup();
+
+        function initPageLogic() {
+            if (window.audioEngine) {
+                window.audioEngine.bindInteractions();
+            }
+            // Re-observe elements on swup load
+            document.querySelectorAll('.blueprint-card').forEach(card => observer.observe(card));
+        }
+
+        initPageLogic();
+        swup.hooks.on('page:view', initPageLogic);
     </script>
 </body>
 

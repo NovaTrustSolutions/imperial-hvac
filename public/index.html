@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Imperial HVAC | Engineering Pure Comfort</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0055ff",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1623", // Deep charcoal leaning from the primary hue
+                        "silver": "#E0E0E0",
+                        "steel": "#2e426b",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-header {
+            background: rgba(15, 22, 35, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1);
+        }
+
+        .metallic-gradient {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2e426b 100%);
+        }
+
+        .blueprint-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 85, 255, 0.1) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(0, 85, 255, 0.4);
+        }
+
+        /* Airflow Animation */
+        @keyframes airflow {
+            0% {
+                stroke-dashoffset: 1000;
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
+        }
+
+        .airflow-path {
+            stroke-dasharray: 100;
+            animation: airflow 8s linear infinite;
+        }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-wrap {
+            overflow: hidden;
+            background: rgba(0, 85, 255, 0.1);
+            backdrop-filter: blur(4px);
+            border-top: 1px solid rgba(0, 85, 255, 0.2);
+        }
+
+        .ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 30s linear infinite;
+        }
+
+        /* Blueprint Gallery Modal */
+        /* Blueprint Gallery Modal (Studio Dialect Style) */
+        #blueprint-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(15, 22, 35, 0.98);
+            backdrop-filter: blur(30px);
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            perspective: 2000px;
+        }
+
+        #blueprint-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #blueprint-modal.active .blueprint-ring {
+            transform: translateZ(-2500px) rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg));
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #blueprint-modal.split-view-active .blueprint-ring-container {
+            height: 60vh;
+        }
+
+        #blueprint-modal.split-view-active .blueprint-ring {
+            transform: translateZ(-2500px) translateY(100px) rotateY(var(--ry, 0deg)) rotateX(10deg);
+        }
+
+        .blueprint-ring-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            perspective: 2500px;
+        }
+
+        .blueprint-ring {
+            position: relative;
+            width: 500px;
+            height: 700px;
+            transform-style: preserve-3d;
+            transform: translateZ(-3500px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blueprint-panel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #002266;
+            border: 1px solid rgba(0, 85, 255, 0.5);
+            box-shadow: 0 0 40px rgba(0, 85, 255, 0.2);
+            backface-visibility: hidden;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .blueprint-panel:hover {
+            border-color: #0055ff;
+            box-shadow: 0 0 60px rgba(0, 85, 255, 0.6);
+            transform: translateZ(50px) !important;
+        }
+
+        .blueprint-panel img {
+            width: 100%;
+            height: 85%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .blueprint-caption {
+            height: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0.6;
+        }
+
+        #blueprint-modal h2 {
+            position: absolute;
+            top: 5vh;
+            color: white;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.8em;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #blueprint-modal.split-view-active h2 {
+            opacity: 0;
+        }
+
+        .gallery-controls {
+            position: absolute;
+            bottom: 2rem;
+            z-index: 110;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        #blueprint-modal.split-view-active .gallery-controls {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        /* Split View Details Pane */
+        .blueprint-details-pane {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            background: linear-gradient(to top, rgba(10, 15, 25, 1) 0%, rgba(15, 22, 35, 0.95) 100%);
+            border-top: 1px solid rgba(0, 85, 255, 0.3);
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            padding: 4rem;
+            opacity: 0;
+            z-index: 105;
+        }
+
+        #blueprint-modal.split-view-active .blueprint-details-pane {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .details-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .details-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .details-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: #0055ff;
+            font-size: 0.875rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .details-body {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            #blueprint-modal.active .blueprint-ring {
+                transform: translateZ(-2500px) scale(0.6) rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg));
+            }
+
+            #blueprint-modal.split-view-active .blueprint-ring {
+                transform: translateZ(-2500px) translateY(0px) scale(0.5) rotateY(var(--ry, 0deg)) rotateX(10deg);
+            }
+
+            .blueprint-details-pane {
+                padding: 2rem 1.5rem;
+                height: 50vh;
+            }
+
+            .details-title {
+                font-size: 1.5rem;
+            }
+
+            .details-body {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            #blueprint-modal h2 {
+                top: 2vh;
+                font-size: 10px;
+                letter-spacing: 0.4em;
+            }
+
+            #blueprint-modal.split-view-active .blueprint-ring-container {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 selection:bg-primary/30">
+    <!-- Glass Header -->
+    <header class="fixed top-0 w-full z-50 glass-header border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-12 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tighter leading-none text-white uppercase">IMPERIAL <span
+                            class="text-primary">HVAC</span></h1>
+                    <p class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Engineering Division</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
+                <a class="text-primary transition-colors border-b-2 border-primary" href="index.html">Main</a>
+                <a class="text-slate-300 hover:text-primary transition-colors" href="services.html">Services</a>
+                <a class="text-slate-300 hover:text-primary transition-colors" href="contact.html">Booking</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='contact.html'"
+                    class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-primary/25">
+                    Consultation
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="relative">
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/80 to-transparent z-10">
+                </div>
+                <img alt="Mechanical Room"
+                    class="w-full h-full object-cover grayscale opacity-40 brightness-75 scale-105"
+                    data-alt="High-contrast blue-lit industrial mechanical room with pipes"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl-fdyKBUdfl3Y-qaPbSXiqF8cbKoqlFO1yrL9SBJsJuoIbIpc44h5qCiVBCLzEZptiWl450Q2XYvneioeTS5vz_b4vydmGpbqKeQsJ1VPJ6kWcNIHb64rH6-48rMTjwGBlgHhpj0kznLlqPpfho1vjxUCk0DYpOpwTxk3cBHjqBv-hGvvhPBoXHynFbUB8xjzCIv15Bn-XlZi46UIe1ealeZI0rv86TBy7ryf2iZJaEzhQ5JbeGLt4FHqntIGy7bvAfSZGkTCaDg" />
+                <!-- SVG Airflow Overlay -->
+                <svg class="absolute inset-0 w-full h-full z-0 opacity-20 pointer-events-none"
+                    preserveAspectRatio="none" viewBox="0 0 1000 1000">
+                    <path class="airflow-path" d="M -100 200 Q 250 150 500 200 T 1100 200" fill="none" stroke="#0055ff"
+                        stroke-width="2" />
+                    <path class="airflow-path" d="M -100 400 Q 250 350 500 400 T 1100 400" fill="none" stroke="#0055ff"
+                        stroke-width="2" style="animation-delay: -2s;" />
+                    <path class="airflow-path" d="M -100 600 Q 250 550 500 600 T 1100 600" fill="none" stroke="#0055ff"
+                        stroke-width="2" style="animation-delay: -4s;" />
+                    <path class="airflow-path" d="M -100 800 Q 250 750 500 800 T 1100 800" fill="none" stroke="#0055ff"
+                        stroke-width="2" style="animation-delay: -6s;" />
+                </svg>
+                <div class="absolute inset-0 bg-primary/10 mix-blend-overlay z-0"></div>
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 w-full">
+                <div class="max-w-3xl">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-6">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </span>
+                        Elite Climate Control
+                    </div>
+                    <h1 class="text-white text-6xl md:text-8xl font-bold leading-[0.9] tracking-tighter mb-8 text-glow">
+                        ENGINEERING <br /> <span class="text-primary">PURE COMFORT</span>
+                    </h1>
+                    <p class="text-slate-400 text-lg md:text-xl max-w-xl leading-relaxed mb-10 font-light">
+                        Bespoke high-end thermal management systems for architectural landmarks. Where mechanical
+                        precision meets silent operation.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button
+                            class="bg-primary text-white px-10 py-5 rounded-xl font-bold text-lg tracking-wide hover:scale-105 transition-transform shadow-2xl shadow-primary/40 uppercase">
+                            Start Consultation
+                        </button>
+                        <button id="view-blueprint-btn"
+                            class="bg-white/5 backdrop-blur-md border border-white/10 text-white px-10 py-5 rounded-xl font-bold text-lg tracking-wide hover:bg-white/10 transition-colors uppercase">
+                            View Blueprint
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+                <span class="material-symbols-outlined text-slate-500 text-3xl">keyboard_double_arrow_down</span>
+            </div>
+        </section>
+        <!-- The Imperial Standard (Overlapping Elements) -->
+        <section class="py-24 relative overflow-hidden bg-background-light dark:bg-background-dark">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="relative">
+                        <!-- Overlapping Images Grid -->
+                        <div
+                            class="relative z-10 w-full aspect-square bg-steel rounded-2xl overflow-hidden border border-white/10">
+                            <img alt="Luxury Interior" class="w-full h-full object-cover"
+                                data-alt="Minimalist luxury living room interior with clean lines"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4oJXy-6DmOLjb2iQg1-CJGrd4rwkwOxZfdbIxT67D6Jzy0bMAmCRTWtuVwYnj5QZmd_k7jcx1jgBTKughkBG51aYM6KEB2hz7LP_wHEhP3871ELvfItFCU5tUIC-Kt_JHDa5NfH6RhDVEvooXjG9fPXSZGsbaAOhhFTHsOKJG2fQsHhn4_fIHV_wmUVBhUCp78xYv1RlVdE5oiClgDTv51AIW1cAAC-jxPU8pEV5ocRVzhAro9TU-Jtqd541HKwTJ4xATv6k72NI" />
+                        </div>
+                        <div
+                            class="absolute -bottom-10 -right-10 z-20 w-2/3 aspect-[4/3] bg-primary/20 backdrop-blur-xl rounded-2xl overflow-hidden border border-primary/30 p-1">
+                            <img alt="Technical Detail" class="w-full h-full object-cover rounded-xl"
+                                data-alt="High-end industrial ventilation hardware details"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKAVaIci6ND1D_pG57YH1lxJp2iUlamJvrnPtQKY2HWQqT2onVANHHK4tHOuLF1myH0PozIj4ycgwpH43h3Vmp69_3WYm95EglWrfCWKktwcnBx5eWSo1VLeqqKL2A2GJHHOwOdlJl6OUH9ljcKvQeHEet9fBZ1AyaPOF4OHc36OoC1YN2fDOc1kw0N5ohFbqEaJ0v9UZITS2BO6eOqsLxIci1E_D5Bqu_QOImQeZF9KkngUszvDF5qfdzSXhQ0sQvfoyFfiFYV4E" />
+                        </div>
+                        <div class="absolute -top-6 -left-6 z-0 w-32 h-32 blueprint-pattern opacity-50"></div>
+                    </div>
+                    <div class="lg:pl-10">
+                        <h2 class="text-primary text-sm font-bold uppercase tracking-[0.4em] mb-4">Quality Assurance
+                        </h2>
+                        <h3 class="text-white text-4xl md:text-5xl font-bold tracking-tight mb-8">THE IMPERIAL STANDARD
+                        </h3>
+                        <p class="text-slate-400 text-lg leading-relaxed mb-12">
+                            Our systems aren't just installed; they are commissioned. Every component is hand-selected
+                            for acoustic neutrality and lifelong durability.
+                        </p>
+                        <div class="space-y-8">
+                            <div class="flex gap-6">
+                                <div
+                                    class="shrink-0 w-14 h-14 rounded-xl bg-steel/50 border border-white/5 flex items-center justify-center">
+                                    <span
+                                        class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white text-xl font-bold mb-2 uppercase tracking-wide">High-End
+                                        Hardware</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Industrial-grade components forged
+                                        from recycled aircraft aluminum and reinforced steel.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div
+                                    class="shrink-0 w-14 h-14 rounded-xl bg-steel/50 border border-white/5 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary text-3xl">volume_off</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white text-xl font-bold mb-2 uppercase tracking-wide">Silent
+                                        Operation</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Acoustic baffling and magnetic
+                                        levitation fans ensure operation below 20 decibels.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div
+                                    class="shrink-0 w-14 h-14 rounded-xl bg-steel/50 border border-white/5 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary text-3xl">nest_eco_leaf</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white text-xl font-bold mb-2 uppercase tracking-wide">Smart
+                                        Integration</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Native connectivity with Control4,
+                                        Crestron, and Savant home automation ecosystems.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Service Blueprint -->
+        <section class="py-24 bg-white/5 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+                    <div class="max-w-xl">
+                        <h2 class="text-primary text-sm font-bold uppercase tracking-[0.4em] mb-4">Our Services</h2>
+                        <h3 class="text-white text-4xl md:text-5xl font-bold tracking-tight">SERVICE BLUEPRINT</h3>
+                    </div>
+                    <p class="text-slate-400 text-right max-w-xs text-sm uppercase tracking-widest font-medium">
+                        Technical specifications for elite environments.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Service Card 1 -->
+                    <div
+                        class="group relative bg-background-dark border border-white/5 p-10 rounded-2xl hover:border-primary/50 transition-all duration-500 overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span class="material-symbols-outlined text-9xl">thermostat</span>
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="w-16 h-16 mb-8 text-primary group-hover:scale-110 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">thermostat</span>
+                            </div>
+                            <h4 class="text-white text-2xl font-bold mb-4 uppercase tracking-wider">Heating</h4>
+                            <p class="text-slate-400 leading-relaxed mb-8">
+                                Hydronic underfloor heating and geothermal heat pumps designed for consistent, radiant
+                                warmth.
+                            </p>
+                            <div class="h-px w-full bg-gradient-to-r from-primary/50 to-transparent mb-8"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Thermal Precision
+                                </li>
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Zone Mapping
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div
+                        class="group relative bg-background-dark border border-white/5 p-10 rounded-2xl hover:border-primary/50 transition-all duration-500 overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span class="material-symbols-outlined text-9xl">ac_unit</span>
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="w-16 h-16 mb-8 text-primary group-hover:scale-110 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">ac_unit</span>
+                            </div>
+                            <h4 class="text-white text-2xl font-bold mb-4 uppercase tracking-wider">Cooling</h4>
+                            <p class="text-slate-400 leading-relaxed mb-8">
+                                Multi-stage VRF systems with HEPA air purification and active humidity modulation.
+                            </p>
+                            <div class="h-px w-full bg-gradient-to-r from-primary/50 to-transparent mb-8"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> HEPA Filtration
+                                </li>
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Adaptive Chill
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div
+                        class="group relative bg-background-dark border border-white/5 p-10 rounded-2xl hover:border-primary/50 transition-all duration-500 overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span class="material-symbols-outlined text-9xl">air</span>
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="w-16 h-16 mb-8 text-primary group-hover:scale-110 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">air</span>
+                            </div>
+                            <h4 class="text-white text-2xl font-bold mb-4 uppercase tracking-wider">Ventilation</h4>
+                            <p class="text-slate-400 leading-relaxed mb-8">
+                                Energy Recovery Ventilators (ERV) that maintain oxygen levels without losing thermal
+                                energy.
+                            </p>
+                            <div class="h-px w-full bg-gradient-to-r from-primary/50 to-transparent mb-8"></div>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> CO2 Monitoring
+                                </li>
+                                <li class="flex items-center gap-2 text-xs text-silver tracking-widest uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Heat Recovery
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Booking Form Section -->
+        <section class="py-24 relative">
+            <div class="max-w-4xl mx-auto px-6">
+                <div
+                    class="bg-steel/30 backdrop-blur-md rounded-3xl border border-white/10 p-8 md:p-16 relative overflow-hidden">
+                    <div
+                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent">
+                    </div>
+                    <div class="text-center mb-12">
+                        <h2 class="text-white text-3xl md:text-4xl font-bold mb-4 tracking-tight uppercase">SECURE YOUR
+                            SYSTEM</h2>
+                        <p class="text-slate-400">Request a technical consultation with our engineering team.</p>
+                    </div>
+                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-silver uppercase tracking-widest ml-1">Full
+                                Name</label>
+                            <input
+                                class="bg-background-dark border-white/10 rounded-xl px-4 py-4 text-white focus:ring-primary focus:border-primary placeholder:text-slate-600"
+                                placeholder="Johnathan Sterling" type="text" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-silver uppercase tracking-widest ml-1">Email
+                                Address</label>
+                            <input
+                                class="bg-background-dark border-white/10 rounded-xl px-4 py-4 text-white focus:ring-primary focus:border-primary placeholder:text-slate-600"
+                                placeholder="sterling@private.com" type="email" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-silver uppercase tracking-widest ml-1">Project
+                                Type</label>
+                            <select
+                                class="bg-background-dark border-white/10 rounded-xl px-4 py-4 text-white focus:ring-primary focus:border-primary">
+                                <option>New Construction</option>
+                                <option>System Retrofit</option>
+                                <option>Annual Commissioning</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-silver uppercase tracking-widest ml-1">Location</label>
+                            <input
+                                class="bg-background-dark border-white/10 rounded-xl px-4 py-4 text-white focus:ring-primary focus:border-primary placeholder:text-slate-600"
+                                placeholder="Metropolitan Area" type="text" />
+                        </div>
+                        <div class="md:col-span-2 flex flex-col gap-2">
+                            <label class="text-xs font-bold text-silver uppercase tracking-widest ml-1">Project
+                                Brief</label>
+                            <textarea
+                                class="bg-background-dark border-white/10 rounded-xl px-4 py-4 text-white focus:ring-primary focus:border-primary placeholder:text-slate-600"
+                                placeholder="Describe the architectural requirements..." rows="4"></textarea>
+                        </div>
+                        <div class="md:col-span-2 mt-4">
+                            <button
+                                class="w-full bg-primary text-white font-bold py-5 rounded-xl uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-primary/30">
+                                Send Inquiry
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-background-dark border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-8 object-contain">
+                        <span class="text-white text-lg font-bold tracking-tight">IMPERIAL</span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs">
+                        Leading the evolution of residential climate engineering. Precision. Silence. Performance.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-silver text-xs font-bold uppercase tracking-[0.2em] mb-6">Systems</h5>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li><a class="hover:text-primary transition-colors" href="#">Residential Central</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Industrial Retrofit</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Smart Ventilation</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-silver text-xs font-bold uppercase tracking-[0.2em] mb-6">Company</h5>
+                    <ul class="space-y-3 text-sm text-slate-500">
+                        <li><a class="hover:text-primary transition-colors" href="#">Our History</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Engineering Labs</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-silver text-xs font-bold uppercase tracking-[0.2em] mb-6">Global HQ</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        888 Tech Plaza, Floor 42<br />
+                        Silicon District, SF<br />
+                        +1 (800) IMP-HVAC
+                    </p>
+                </div>
+            </div>
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-slate-600 text-xs tracking-widest uppercase">
+                    © 2024 Imperial HVAC Systems. All Rights Reserved.
+                </p>
+                <div class="flex gap-8">
+                    <a class="text-slate-600 hover:text-silver transition-colors text-xs tracking-widest uppercase"
+                        href="#">Privacy</a>
+                    <a class="text-slate-600 hover:text-silver transition-colors text-xs tracking-widest uppercase"
+                        href="#">Terms</a>
+                    <a class="text-slate-600 hover:text-silver transition-colors text-xs tracking-widest uppercase"
+                        href="#">Compliance</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Ticker System -->
+    <div class="fixed bottom-0 left-0 w-full z-50 ticker-wrap py-2">
+        <div class="ticker-content font-mono text-[10px] uppercase tracking-widest text-primary/80">
+            <span class="mx-8">System Status: <span class="text-white">Optimal</span></span>
+            <span class="mx-8">Node_01: <span class="text-white" id="node-01-temp">68.4°F</span></span>
+            <span class="mx-8">Air Quality: <span class="text-white">99.2%</span></span>
+            <span class="mx-8">Pressure: <span class="text-white">14.7 PSI</span></span>
+            <span class="mx-8">Load: <span class="text-white">24%</span></span>
+            <span class="mx-8">Security: <span class="text-white">ENCRYPTED</span></span>
+            <!-- Duplicated content for seamless loop -->
+            <span class="mx-8">System Status: <span class="text-white">Optimal</span></span>
+            <span class="mx-8">Node_01: <span class="text-white" id="node-01-temp-dup">68.4°F</span></span>
+            <span class="mx-8">Air Quality: <span class="text-white">99.2%</span></span>
+            <span class="mx-8">Pressure: <span class="text-white">14.7 PSI</span></span>
+            <span class="mx-8">Load: <span class="text-white">24%</span></span>
+            <span class="mx-8">Security: <span class="text-white">ENCRYPTED</span></span>
+        </div>
+    </div>
+
+    <!-- Blueprint Modal -->
+    <div id="blueprint-modal">
+        <h2>Technical Specification Ring</h2>
+        <button id="close-modal"
+            class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[120]">
+            <span class="material-symbols-outlined text-4xl">close</span>
+        </button>
+
+        <div class="blueprint-ring-container">
+            <div class="blueprint-ring">
+                <!-- TOP ROW (Y: -750px) -->
+                <div class="blueprint-panel" style="transform: rotateY(0deg) translateY(-750px) translateZ(900px);"
+                    data-id="heater">
+                    <img src="assets/blueprints/blueprint_heater_1771656741610.png" alt="Heater">
+                    <div class="blueprint-caption">IH-5000 Heating Unit</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(60deg) translateY(-750px) translateZ(900px);"
+                    data-id="ac">
+                    <img src="assets/blueprints/blueprint_ac_v2_1771656763802.png" alt="A/C">
+                    <div class="blueprint-caption">M-101 Central A/C</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(120deg) translateY(-750px) translateZ(900px);"
+                    data-id="ventilation">
+                    <img src="assets/blueprints/blueprint_ventilation_v2_1771656778216.png" alt="Ventilation">
+                    <div class="blueprint-caption">ADV-2024 Ventilation</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(180deg) translateY(-750px) translateZ(900px);"
+                    data-id="boiler">
+                    <img src="assets/blueprints/blueprint_boiler_1771657038157.png" alt="Boiler">
+                    <div class="blueprint-caption">IHS-5000 Boiler System</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(240deg) translateY(-750px) translateZ(900px);"
+                    data-id="thermostat">
+                    <img src="assets/blueprints/blueprint_smart_thermostat_v3_1771657066207.png" alt="Thermostat">
+                    <div class="blueprint-caption">Smart Control Board</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(300deg) translateY(-750px) translateZ(900px);"
+                    data-id="scrubber">
+                    <img src="assets/blueprints/blueprint_air_scrubber_v4_1771657086843.png" alt="Air Scrubber">
+                    <div class="blueprint-caption">IAS-4000 Air Scrubber</div>
+                </div>
+
+                <!-- MIDDLE ROW (Y: 0px) -->
+                <div class="blueprint-panel" style="transform: rotateY(0deg) translateY(0px) translateZ(900px);"
+                    data-id="heater">
+                    <img src="assets/blueprints/blueprint_heater_1771656741610.png" alt="Heater">
+                    <div class="blueprint-caption">IH-5000 Heating Unit</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(60deg) translateY(0px) translateZ(900px);"
+                    data-id="ac">
+                    <img src="assets/blueprints/blueprint_ac_v2_1771656763802.png" alt="A/C">
+                    <div class="blueprint-caption">M-101 Central A/C</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(120deg) translateY(0px) translateZ(900px);"
+                    data-id="ventilation">
+                    <img src="assets/blueprints/blueprint_ventilation_v2_1771656778216.png" alt="Ventilation">
+                    <div class="blueprint-caption">ADV-2024 Ventilation</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(180deg) translateY(0px) translateZ(900px);"
+                    data-id="boiler">
+                    <img src="assets/blueprints/blueprint_boiler_1771657038157.png" alt="Boiler">
+                    <div class="blueprint-caption">IHS-5000 Boiler System</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(240deg) translateY(0px) translateZ(900px);"
+                    data-id="thermostat">
+                    <img src="assets/blueprints/blueprint_smart_thermostat_v3_1771657066207.png" alt="Thermostat">
+                    <div class="blueprint-caption">Smart Control Board</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(300deg) translateY(0px) translateZ(900px);"
+                    data-id="scrubber">
+                    <img src="assets/blueprints/blueprint_air_scrubber_v4_1771657086843.png" alt="Air Scrubber">
+                    <div class="blueprint-caption">IAS-4000 Air Scrubber</div>
+                </div>
+
+                <!-- BOTTOM ROW (Y: 750px) -->
+                <div class="blueprint-panel" style="transform: rotateY(0deg) translateY(750px) translateZ(900px);"
+                    data-id="heater">
+                    <img src="assets/blueprints/blueprint_heater_1771656741610.png" alt="Heater">
+                    <div class="blueprint-caption">IH-5000 Heating Unit</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(60deg) translateY(750px) translateZ(900px);"
+                    data-id="ac">
+                    <img src="assets/blueprints/blueprint_ac_v2_1771656763802.png" alt="A/C">
+                    <div class="blueprint-caption">M-101 Central A/C</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(120deg) translateY(750px) translateZ(900px);"
+                    data-id="ventilation">
+                    <img src="assets/blueprints/blueprint_ventilation_v2_1771656778216.png" alt="Ventilation">
+                    <div class="blueprint-caption">ADV-2024 Ventilation</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(180deg) translateY(750px) translateZ(900px);"
+                    data-id="boiler">
+                    <img src="assets/blueprints/blueprint_boiler_1771657038157.png" alt="Boiler">
+                    <div class="blueprint-caption">IHS-5000 Boiler System</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(240deg) translateY(750px) translateZ(900px);"
+                    data-id="thermostat">
+                    <img src="assets/blueprints/blueprint_smart_thermostat_v3_1771657066207.png" alt="Thermostat">
+                    <div class="blueprint-caption">Smart Control Board</div>
+                </div>
+                <div class="blueprint-panel" style="transform: rotateY(300deg) translateY(750px) translateZ(900px);"
+                    data-id="scrubber">
+                    <img src="assets/blueprints/blueprint_air_scrubber_v4_1771657086843.png" alt="Air Scrubber">
+                    <div class="blueprint-caption">IAS-4000 Air Scrubber</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blueprint-details-pane">
+            <div class="details-content">
+                <div id="details-subtitle" class="details-subtitle">Technical Specification</div>
+                <h3 id="details-title" class="details-title">System Name</h3>
+                <p id="details-body" class="details-body">System description will appear here.</p>
+            </div>
+        </div>
+
+        <div class="gallery-controls">
+            <p class="text-white/20 font-mono text-[9px] uppercase tracking-[0.3em]">Scroll or Move Mouse to Navigate •
+                Click Panel for Details
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('blueprint-modal');
+        const viewBtn = document.getElementById('view-blueprint-btn');
+        const closeBtn = document.getElementById('close-modal');
+        const ring = document.querySelector('.blueprint-ring');
+
+        let targetRotateY = 0;
+        let targetRotateX = 0;
+        let currentRotateY = 0;
+        let currentRotateX = 0;
+
+        function openModal() {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+
+            // Initial positioning
+            currentRotateY = 0;
+            currentRotateX = 0;
+            updateRing();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modal.classList.remove('split-view-active');
+            setTimeout(() => modal.style.display = 'none', 800);
+            document.body.style.overflow = '';
+
+            // Re-enable rotation listeners if they were removed
+            modal.onmousemove = handleRotation;
+        }
+
+        function updateRing() {
+            // Smooth lerp for the rotations
+            currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+            currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+
+            modal.style.setProperty('--ry', `${currentRotateY}deg`);
+            modal.style.setProperty('--rx', `${currentRotateX}deg`);
+
+            requestAnimationFrame(updateRing);
+        }
+
+        if (viewBtn) viewBtn.onclick = openModal;
+        if (closeBtn) closeBtn.onclick = closeModal;
+
+        // --- Details Data and Logic ---
+        const blueprintData = {
+            'heater': {
+                title: 'IH-5000 Heating Unit',
+                body: 'The IH-5000 represents the pinnacle of thermal exchange architecture. Initially developed for rapid-deployment arctic research stations, its core uses a proprietary micro-tungsten coil array capable of achieving 98.7% thermal efficiency. Generation III models introduced the reinforced cobalt shielding depicted here, completely neutralizing thermal bleed.'
+            },
+            'ac': {
+                title: 'M-101 Central A/C',
+                body: 'Engineered for hyper-efficient zero-loss cooling, the M-101 system utilizes a magnetic-bearing compressor design. By eliminating mechanical friction, the unit achieves unprecedented longevity. The schematic details the dual-stage refrigerant cycle and the internal baffling system designed to perfectly laminate airflow before dispersal.'
+            },
+            'ventilation': {
+                title: 'ADV-2024 Ventilation',
+                body: 'The ADV-2024 is structurally integrated HEPA-grade atmospheric scrubbing. Designed for surgical and bio-secure environments, it manages pressure differentials to a tolerance of 0.001 PSI. Notice the cross-section of the dampening baffles; these ensure that even at maximum throughput, acoustic output remains below 15 decibels.'
+            },
+            'boiler': {
+                title: 'IHS-5000 Boiler System',
+                body: 'Industrial micro-boiler architecture functioning at supercritical pressures. The IHS-5000 features a seamless titanium-alloy pressure vessel rated for continuous operation at 4,000 PSI. The blueprint highlights the recursive heat recovery loop, a patented mechanism that pre-heats intake water utilizing exhaust thermodynamics.'
+            },
+            'thermostat': {
+                title: 'Smart Control Board',
+                body: 'The central nervous system of modern Imperial installations. The Smart Control Board features quantum-encrypted telemetry modules, ensuring zero-latency, tamper-proof environmental adjustments. The schematic exposes the logic gate layout and the environmental sensor array capable of detecting micro-fluctuations in localized ambient temperature.'
+            },
+            'scrubber': {
+                title: 'IAS-4000 Air Scrubber',
+                body: 'Sub-micron particulate filtration deployed at industrial scale. The IAS-4000 uses an electrostatic precipitation matrix followed by a final-stage activated carbon lattice. Capable of neutralizing 99.999% of airborne particulates and volatile organic compounds (VOCs) within a 50,000 cubic foot volume every fifteen minutes.'
+            }
+        };
+
+        const detailsTitle = document.getElementById('details-title');
+        const detailsBody = document.getElementById('details-body');
+        const panels = document.querySelectorAll('.blueprint-panel');
+
+        panels.forEach(panel => {
+            panel.addEventListener('click', () => {
+                const id = panel.getAttribute('data-id');
+                if (blueprintData[id]) {
+                    // Populate details
+                    detailsTitle.innerText = blueprintData[id].title;
+                    detailsBody.innerText = blueprintData[id].body;
+
+                    // Trigger split view CSS adjustment
+                    modal.classList.add('split-view-active');
+
+                    // Center the clicked panel by overriding the current rotation
+                    // Assuming panel transforms look like: rotateY(Xdeg) translateY(...) translateZ(...)
+                    const transformAttr = panel.style.transform;
+                    const match = transformAttr.match(/rotateY\((-?\d+)deg\)/);
+                    if (match) {
+                        // Offset by -current rotation to bring it center
+                        targetRotateY = -parseInt(match[1]);
+                        targetRotateX = 10; // Default tilt for split view
+
+                        // Disable mouse rotation while deep diving
+                        modal.onmousemove = null;
+
+                        // Provide a way to exit focus mode
+                        modal.onclick = (e) => {
+                            if (!e.target.closest('.blueprint-details-pane') && !e.target.closest('.blueprint-panel') && e.target !== closeBtn) {
+                                modal.classList.remove('split-view-active');
+                                modal.onmousemove = handleRotation;
+                            }
+                        };
+                    }
+                }
+            });
+        });
+
+        const handleRotation = (e) => {
+            const x = (e.clientX / window.innerWidth) - 0.5;
+            const y = (e.clientY / window.innerHeight) - 0.5;
+
+            targetRotateY = currentRotateY + (x * 20); // Relative continuous rotation
+            targetRotateX = y * -30; // Tilt up to 15 degrees
+        };
+
+        modal.onmousemove = handleRotation;
+
+        // Close on escape
+        document.onkeydown = (e) => {
+            if (e.key === 'Escape') closeModal();
+        };
+
+        // Live Telemetry Simulation
+        setInterval(() => {
+            const temp = (68 + Math.random() * 0.5).toFixed(1) + "°F";
+            const node01Element = document.getElementById('node-01-temp');
+            const node01DupElement = document.getElementById('node-01-temp-dup');
+            if (node01Element) node01Element.innerText = temp;
+            if (node01DupElement) node01DupElement.innerText = temp;
+        }, 3000);
+    </script>
+</body>
+
+</html>

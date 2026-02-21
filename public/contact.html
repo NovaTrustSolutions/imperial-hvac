@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Imperial HVAC | Engineering Consultation</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Space+Mono&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0055ff",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1623",
+                        "industrial": "#1A1A1A",
+                        "brushed-silver": "#E0E0E0",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["Space Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-header {
+            background: rgba(15, 22, 35, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .blueprint-grid {
+            background-image: radial-gradient(circle, rgba(0, 85, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #0055ff, transparent);
+            opacity: 0.3;
+        }
+
+        .form-section-border {
+            border-left: 2px solid #0055ff;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .form-section-border.reveal {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px rgba(0, 85, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-industrial font-display text-slate-900 dark:text-slate-100 selection:bg-primary/30 min-h-screen blueprint-grid">
+    <!-- Glass Header -->
+    <header class="fixed top-0 w-full z-50 glass-header border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-12 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tighter leading-none text-white uppercase">IMPERIAL <span
+                            class="text-primary">HVAC</span></h1>
+                    <p class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Engineering Division</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
+                <a class="text-slate-300 hover:text-primary transition-colors" href="index.html">Main</a>
+                <a class="text-slate-300 hover:text-primary transition-colors" href="services.html">Services</a>
+                <a class="text-primary transition-colors border-b-2 border-primary" href="contact.html">Booking</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='contact.html'"
+                    class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-primary/25">
+                    Consultation
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="pt-32 pb-20 px-6 lg:px-20 max-w-7xl mx-auto">
+        <!-- Consultation Brief -->
+        <div class="mb-12">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="h-[1px] w-12 bg-primary"></div>
+                <span class="text-primary font-mono text-xs uppercase tracking-[0.3em]">Protocol 08-B</span>
+            </div>
+            <h2 class="text-5xl lg:text-6xl font-black uppercase leading-tight max-w-3xl">
+                Request a <span class="text-primary">Technical</span> Consultation
+            </h2>
+            <p class="text-slate-400 mt-4 max-w-xl font-medium">
+                Initialize high-fidelity diagnostics for precision climate control systems. Complete the unit identity
+                and terrain mapping parameters below.
+            </p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- The Booking Machine (Form) -->
+            <div class="lg:col-span-2 space-y-12">
+                <!-- Section: Unit Identity -->
+                <section class="form-section-border pl-6 space-y-6">
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="material-symbols-outlined text-primary">fingerprint</span>
+                        <h3 class="text-xl font-bold uppercase tracking-tight">01. Unit Identity</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Full Operator
+                                Name</label>
+                            <input
+                                class="w-full bg-transparent border-b border-slate-700 focus:border-primary focus:ring-0 text-white py-3 transition-all font-mono uppercase placeholder:text-slate-700"
+                                placeholder="SURNAME, INITIALS" type="text" />
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Secure Link
+                                (Email)</label>
+                            <input
+                                class="w-full bg-transparent border-b border-slate-700 focus:border-primary focus:ring-0 text-white py-3 transition-all font-mono uppercase placeholder:text-slate-700"
+                                placeholder="OP@IMPERIAL-CORP.COM" type="email" />
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Comms Frequency
+                                (Phone)</label>
+                            <input
+                                class="w-full bg-transparent border-b border-slate-700 focus:border-primary focus:ring-0 text-white py-3 transition-all font-mono uppercase placeholder:text-slate-700"
+                                placeholder="+00 (000) 000-0000" type="tel" />
+                        </div>
+                        <div class="group">
+                            <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Organization
+                                Code</label>
+                            <input
+                                class="w-full bg-transparent border-b border-slate-700 focus:border-primary focus:ring-0 text-white py-3 transition-all font-mono uppercase placeholder:text-slate-700"
+                                placeholder="ALPHA-7" type="text" />
+                        </div>
+                    </div>
+                </section>
+                <!-- Section: System Diagnostics -->
+                <section class="form-section-border pl-6 space-y-8">
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="material-symbols-outlined text-primary">query_stats</span>
+                        <h3 class="text-xl font-bold uppercase tracking-tight">02. System Diagnostics</h3>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <button
+                            class="flex flex-col items-center justify-center p-6 border border-slate-800 rounded-lg hover:border-primary group transition-all bg-slate-900/40">
+                            <span
+                                class="material-symbols-outlined text-3xl text-slate-500 group-hover:text-primary mb-3">ac_unit</span>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Cooling</span>
+                        </button>
+                        <button
+                            class="flex flex-col items-center justify-center p-6 border border-primary rounded-lg bg-primary/10 group transition-all">
+                            <span class="material-symbols-outlined text-3xl text-primary mb-3">heat_pump</span>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-primary">Heating</span>
+                        </button>
+                        <button
+                            class="flex flex-col items-center justify-center p-6 border border-slate-800 rounded-lg hover:border-primary group transition-all bg-slate-900/40">
+                            <span
+                                class="material-symbols-outlined text-3xl text-slate-500 group-hover:text-primary mb-3">air</span>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Air Flow</span>
+                        </button>
+                        <button
+                            class="flex flex-col items-center justify-center p-6 border border-slate-800 rounded-lg hover:border-primary group transition-all bg-slate-900/40">
+                            <span
+                                class="material-symbols-outlined text-3xl text-slate-500 group-hover:text-primary mb-3">nest_cam_wired_stand</span>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Smart
+                                Hub</span>
+                        </button>
+                    </div>
+                </section>
+                <!-- Section: Terrain Mapping -->
+                <section class="form-section-border pl-6 space-y-6">
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="material-symbols-outlined text-primary">map</span>
+                        <h3 class="text-xl font-bold uppercase tracking-tight">03. Terrain Mapping</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Deployment Site
+                                Address</label>
+                            <div class="relative">
+                                <input
+                                    class="w-full bg-slate-900/40 border border-slate-800 focus:border-primary focus:ring-1 focus:ring-primary/20 text-white p-4 rounded-lg transition-all font-mono uppercase placeholder:text-slate-700 pr-12"
+                                    placeholder="123 VECTOR DRIVE, SECTOR 7" type="text" />
+                                <span
+                                    class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-600">location_searching</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="group">
+                                <label
+                                    class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Latitude/City</label>
+                                <input
+                                    class="w-full bg-slate-900/40 border border-slate-800 focus:border-primary focus:ring-0 text-white p-4 rounded-lg transition-all font-mono uppercase placeholder:text-slate-700"
+                                    placeholder="NEW YORK" type="text" />
+                            </div>
+                            <div class="group">
+                                <label class="block text-[10px] font-mono text-slate-500 uppercase mb-2">Zip/Grid
+                                    Code</label>
+                                <input
+                                    class="w-full bg-slate-900/40 border border-slate-800 focus:border-primary focus:ring-0 text-white p-4 rounded-lg transition-all font-mono uppercase placeholder:text-slate-700"
+                                    placeholder="10001" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="pt-8">
+                    <button
+                        class="w-full bg-primary text-white font-black uppercase tracking-[0.2em] py-6 rounded-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(0,85,255,0.3)]">
+                        <span class="material-symbols-outlined">rocket_launch</span>
+                        Initialize Technical Request
+                    </button>
+                    <p class="text-center text-[10px] font-mono text-slate-600 mt-4 uppercase tracking-widest">Awaiting
+                        Command Input. System Ready.</p>
+                </div>
+            </div>
+            <!-- Side Panel: Direct Frequency -->
+            <aside class="space-y-8">
+                <div class="bg-slate-900/50 border border-white/5 p-8 rounded-xl relative overflow-hidden group">
+                    <div class="scanline absolute top-0 left-0"></div>
+                    <h4 class="font-mono text-xs uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">sensors</span>
+                        System Status
+                    </h4>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs uppercase font-mono text-slate-500">Service Nodes</span>
+                            <span class="text-xs font-mono text-emerald-500 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                ACTIVE
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs uppercase font-mono text-slate-500">Wait Duration</span>
+                            <span class="text-xs font-mono text-white tracking-widest" id="wait-timer">14:02 MIN</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs uppercase font-mono text-slate-500">Active Techs</span>
+                            <span class="text-xs font-mono text-white tracking-widest" id="active-techs">48 UNIT</span>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="font-mono text-xs uppercase tracking-widest text-primary mb-4">Direct Frequency</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-slate-600 text-lg">call</span>
+                                <div>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase">Emergency Override</p>
+                                    <p class="text-sm font-bold text-white tracking-wider">1-800-IMP-HVAC</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <span class="material-symbols-outlined text-slate-600 text-lg">terminal</span>
+                                <div>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase">Tech Support Link</p>
+                                    <p class="text-sm font-bold text-white tracking-wider">support.imperial.eng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Specs Card -->
+                <div class="p-8 border border-slate-800 rounded-xl bg-gradient-to-br from-slate-900 to-industrial">
+                    <span class="material-symbols-outlined text-primary mb-4">verified</span>
+                    <h5 class="font-bold text-lg uppercase mb-2">Certified Precision</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed font-mono">
+                        All consultations are handled by Class-A certified thermodynamic engineers. Security protocol
+                        TLS-4 encrypted.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <div class="px-2 py-1 bg-white/5 rounded text-[8px] font-mono uppercase text-slate-400">HVAC-302
+                        </div>
+                        <div class="px-2 py-1 bg-white/5 rounded text-[8px] font-mono uppercase text-slate-400">ASHRAE-S
+                        </div>
+                        <div class="px-2 py-1 bg-white/5 rounded text-[8px] font-mono uppercase text-slate-400">NATE-PRO
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <!-- Technical Footer -->
+    <footer class="border-t border-white/5 px-6 lg:px-20 py-12 bg-industrial mt-12">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-6 object-contain">
+                    <span class="text-xs font-mono uppercase text-slate-500">2024 Imperial HVAC Corporation</span>
+                </div>
+                <p class="text-[10px] font-mono text-slate-700 uppercase tracking-widest">Hardware ID: 49-20-4A-12-88-BF
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-8 text-[10px] font-mono uppercase tracking-widest text-slate-500">
+                <a class="hover:text-primary transition-colors" href="#">Privacy Encryption</a>
+                <a class="hover:text-primary transition-colors" href="#">Legal Framework</a>
+                <a class="hover:text-primary transition-colors" href="#">System Log</a>
+                <a class="hover:text-primary transition-colors" href="#">Coordinates</a>
+            </div>
+            <div
+                class="flex items-center gap-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all">
+                <div class="h-8 w-24 bg-white/10 rounded flex items-center justify-center p-2">
+                    <img alt="Partner Logo 1" class="h-full object-contain"
+                        data-alt="Abstract minimalist industrial tech logo"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9Tcdf-aN2G4zCVasMtpLaeaqcNiXL7bmSl6rEYX1fYZlLYzONPs_Az3YGpz2RqKRCyCiw2iSBNWE1LRFEKZSpj6YkaEHTaorXUyPjAIPVLhy_BFBGnL_tOc7SB089jZA3vk3TDMwwiVzoWqfaBKhDQYAAwcdZhTB-_6NpboPWd7jts8XjL9RpeelcmxCiXxasFm0-QzaCuZyrq6fqWhUHZm2RHJ0ydCSLjW8vZt778dbfzVmMCxUZ41FQHSBjZYoOyPLlvtFcNQs" />
+                </div>
+                <div class="h-8 w-24 bg-white/10 rounded flex items-center justify-center p-2">
+                    <img alt="Partner Logo 2" class="h-full object-contain"
+                        data-alt="Abstract geometric technology partnership logo"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiP956dFU2gOWjok01XGbcaARc-YRQvjf6QpGEEuT3IqruCc4myo187UWDaMHHoYzibbdC9zXoa9WljV_-tIF6Xgf05hAYZaH91WpS-HAhnWxd31NqP_YO4gZs10ms6pHYMJoUs6AY_isKL4NSboa3G7dnt8lMgc6afGkpRuhUEbjrQcmxVXbn9E42v0Q5oE6YxmNJwcm2bDCU6GiOj62-AA-hNwnwu7qPvjMe0kOrOSzBwIzHl1zHwUfZN2QB3GRba4OPYqNwQpM" />
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Intersection Observer for Section Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.form-section-border').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Live Sidebar Simulation
+        setInterval(() => {
+            const techs = 45 + Math.floor(Math.random() * 10);
+            const activeTechsEl = document.getElementById('active-techs');
+            if (activeTechsEl) activeTechsEl.innerText = techs + " UNIT";
+
+            // Randomly flash Wait Duration
+            const waitEl = document.getElementById('wait-timer');
+            if (waitEl && Math.random() > 0.7) {
+                const mins = 12 + Math.floor(Math.random() * 5);
+                const secs = Math.floor(Math.random() * 60);
+                waitEl.innerText = `${mins}:${secs.toString().padStart(2, '0')} MIN`;
+                waitEl.classList.add('text-primary');
+                setTimeout(() => waitEl.classList.remove('text-primary'), 500);
+            }
+        }, 4000);
+    </script>
+</body>
+
+</html>

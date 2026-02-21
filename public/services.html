@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Imperial HVAC Services Detail Page</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0055ff",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1623",
+                        "charcoal": "#1A1A1A",
+                        "silver": "#E0E0E0",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(15, 22, 35, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.1);
+        }
+
+        .blueprint-card {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 1) 0%, rgba(15, 22, 35, 1) 100%);
+            border: 1px solid rgba(224, 224, 224, 0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .blueprint-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .blueprint-card:hover {
+            border-color: #0055ff;
+            box-shadow: 0 0 20px rgba(0, 85, 255, 0.15);
+        }
+
+        .airflow-line {
+            background: linear-gradient(90deg, transparent, rgba(0, 85, 255, 0.3), transparent);
+            height: 1px;
+            width: 100%;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-x-hidden">
+    <!-- Glass Header -->
+    <header class="fixed top-0 w-full z-50 glass-header border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-12 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tighter leading-none text-white uppercase">IMPERIAL <span
+                            class="text-primary">HVAC</span></h1>
+                    <p class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Engineering Division</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
+                <a class="text-slate-300 hover:text-primary transition-colors" href="index.html">Main</a>
+                <a class="text-primary transition-colors border-b-2 border-primary" href="services.html">Services</a>
+                <a class="text-slate-300 hover:text-primary transition-colors" href="contact.html">Booking</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='contact.html'"
+                    class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-primary/25">
+                    Consultation
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="relative min-h-[80vh] flex items-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-background-dark via-background-dark/80 to-transparent z-10">
+                </div>
+                <div class="w-full h-full bg-center bg-cover"
+                    data-alt="Close up of a metallic industrial heat exchanger unit"
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAMycXrAA68zQpfZmSrPpYPTYyhkgbQc2bCsKiiBlaXtuVsc1VV36chAzBOKHyBXi0BqCKy91IWca7fMo-e72Wnc8ykhgqCleaeVJ-c4meCNw2uA3YZTLtYlhO7ZRg76lXicL15DyhgApKiR-qa5rJFQA8PMphy-j-n0aEQ933t46xLXpz06UoxO67soXgZLtVn9AIO-8KeAtPhRXQbRAPilcLaWk-itNp2sgkMQGxvNdAbl6WuYxJKFkVzg4ImVtU2nzJSwthnvVQ')">
+                </div>
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="flex flex-col justify-center gap-8">
+                    <div
+                        class="inline-flex items-center gap-2 text-primary font-mono text-xs tracking-[0.3em] uppercase">
+                        <span class="size-2 bg-primary rounded-full animate-pulse"></span>
+                        Industrial Grade Efficiency
+                    </div>
+                    <h1 class="text-6xl md:text-8xl font-bold leading-[0.9] tracking-tighter dark:text-white">
+                        PRECISION <br /> <span class="text-primary">THERMAL</span> <br /> ENGINEERING
+                    </h1>
+                    <p class="max-w-md text-slate-400 text-lg leading-relaxed">
+                        Deploying industrial-grade HVAC solutions engineered for mission-critical infrastructure.
+                        Specialized in high-output VRF and precision chiller systems.
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <button
+                            class="bg-primary text-white px-8 py-4 rounded font-bold uppercase tracking-widest flex items-center gap-2 group">
+                            System Specifications
+                            <span
+                                class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </button>
+                        <div class="font-mono text-[10px] text-slate-500 uppercase leading-tight">
+                            REF_ID: IMP-HVAC-2024<br />
+                            CERT: ASME / ASHRAE 90.1
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Background Airflow Lines -->
+            <div class="absolute bottom-10 left-0 w-full opacity-20 pointer-events-none">
+                <div class="airflow-line" style="top: 0px; left: -10%;"></div>
+                <div class="airflow-line" style="top: 20px; left: 5%;"></div>
+                <div class="airflow-line" style="top: 40px; left: -15%;"></div>
+            </div>
+        </section>
+        <!-- Services Blueprint Grid -->
+        <section class="py-24 bg-charcoal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <h2 class="text-4xl font-bold tracking-tight dark:text-white mb-2">Engineering Services
+                            Blueprint</h2>
+                        <p class="text-slate-400 font-mono text-sm tracking-tighter">TECHNICAL_SCHEMATICS_v4.02</p>
+                    </div>
+                    <div class="h-px bg-primary/30 flex-grow mx-8 hidden md:block"></div>
+                    <div class="flex gap-4">
+                        <span
+                            class="px-3 py-1 border border-slate-700 rounded text-[10px] font-mono text-slate-500 uppercase">ISO
+                            9001</span>
+                        <span
+                            class="px-3 py-1 border border-slate-700 rounded text-[10px] font-mono text-slate-500 uppercase">HVAC-R</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Heating -->
+                    <div class="blueprint-card p-8 rounded-lg relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-8xl">heat_pump</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 dark:text-white">HEATING SYSTEMS</h3>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed">High-output industrial boilers and
+                            furnace schematics designed for thermal stability in large-scale facilities.</p>
+                        <div class="space-y-4 border-t border-slate-800 pt-6">
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Flow Rate</span>
+                                <span class="font-mono text-xs text-primary">4,500 CFM</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Thermal Load</span>
+                                <span class="font-mono text-xs text-primary">2.5M BTU/H</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Efficiency</span>
+                                <span class="font-mono text-xs text-primary">98.2% AFUE</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <div
+                                class="w-full h-32 bg-slate-900/50 rounded border border-dashed border-slate-700 flex items-center justify-center overflow-hidden">
+                                <div class="w-full h-full opacity-30 grayscale invert"
+                                    data-alt="Technical line art blueprint of a heating furnace"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4-IsWV-fTK3gSEEUk1jLGhpO7sWvxPimNCJVj_w2wAlliUflOM7bO0sjwAIzxX_NVs2_JpQM2X5-cbs4nDYBeADqANfG9aJhkLgf3PY0UEKhQOJjSqu5wkbo_FSb-Pop81BxoAapKF5isfltlcPx281rJvtPKEFq3MAQJZr1LX0U8kI5qq_x4gajPJZyrW8_J8XRoejupt4zTeCillNFcDa-11AFjRQaiP7ikNTkYyemnio4nozbz_SfcA2LsHKy63ScKHSmg1-8'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cooling -->
+                    <div class="blueprint-card p-8 rounded-lg relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-8xl">ac_unit</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 dark:text-white">COOLING INFRASTRUCTURE</h3>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed">Multi-stage VRF systems and precision
+                            chiller specifications for data centers and manufacturing plants.</p>
+                        <div class="space-y-4 border-t border-slate-800 pt-6">
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Cooling Cap</span>
+                                <span class="font-mono text-xs text-primary">500 TONS</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Refrigerant</span>
+                                <span class="font-mono text-xs text-primary">R-454B LOW GWP</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Delta T</span>
+                                <span class="font-mono text-xs text-primary">12°F NOMINAL</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <div
+                                class="w-full h-32 bg-slate-900/50 rounded border border-dashed border-slate-700 flex items-center justify-center overflow-hidden">
+                                <div class="w-full h-full opacity-30 grayscale invert"
+                                    data-alt="Technical schematic diagram of an industrial chiller unit"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfm0wIJvDW3a4hKxzm1S5snlKydqdebK4qNkABAt-9MZEPOH_CAQLSaob4NbBIwbXb1DQyDc5rtSORHfSp03YZdX0ImCJCyemTAKXf4XS6uZjMNFBOKDe3ZcGHgSfLgT-v_o0kVlMQ_chlB2qGBMUqKRuhBOeCOKZPH8PH-nYk3ZCZKa0xsjt8yvLp2c7NCoBy3gpnqvhHJRIbjtdgR_LNGgLgNidy52Lx27cWh0yCV3UOj2fWjzCsaYSb9VdJGPvi4HIL7RlECJI'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ventilation -->
+                    <div class="blueprint-card p-8 rounded-lg relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span class="material-symbols-outlined text-8xl">air</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 dark:text-white">VENTILATION DYNAMICS</h3>
+                        <p class="text-slate-400 text-sm mb-8 leading-relaxed">Advanced HEPA filtration and laminar
+                            airflow controls for sterile environments and clean rooms.</p>
+                        <div class="space-y-4 border-t border-slate-800 pt-6">
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Air Changes</span>
+                                <span class="font-mono text-xs text-primary">24 / HOUR</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Static Press</span>
+                                <span class="font-mono text-xs text-primary">3.5" W.G.</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span class="font-mono text-[10px] text-slate-500 uppercase">Filtration</span>
+                                <span class="font-mono text-xs text-primary">MERV 17+</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <div
+                                class="w-full h-32 bg-slate-900/50 rounded border border-dashed border-slate-700 flex items-center justify-center overflow-hidden">
+                                <div class="w-full h-full opacity-30 grayscale invert"
+                                    data-alt="Technical drawing of airflow dynamics and filtration paths"
+                                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBsmocEA33TWd3QCiw4IaSSi6lVGPLw0gTyygyiQF1pyw4pSHXfq221SqikWR_AqOXKfjwgE-U05NfSC9GdgCaKYAll3ScJ9dCMM2Oo4t2K0FN6RTD0dFiOZ5v-2R9F2t4xcbTMMvx-lPazEDzB3sjmpczN-F6oNU2KgvnS_vInyYy1DQAyvoZK7XxfCJYcZZSR0UXk7gFb0EqgpVtPFBYsUI_GpyyCgKWjtKu9qz8TcjCvzmAnTM-vWrKJXIUIdIl2R6Zj88kAvKQ'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Maintenance Infrastructure Tiers -->
+        <section class="py-24 bg-background-dark">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold dark:text-white mb-4">Infrastructure Maintenance Tiers</h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto">Standardized preventative diagnostic protocols to ensure
+                        99.9% operational uptime of all mechanical assets.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800">
+                                <th class="text-left py-6 px-4 font-mono text-xs uppercase text-slate-500">Service
+                                    Parameter</th>
+                                <th class="py-6 px-4 text-center">
+                                    <div class="text-silver text-xl font-bold tracking-tight">SILVER</div>
+                                    <div class="text-[10px] font-mono text-slate-600">STANDARD</div>
+                                </th>
+                                <th class="py-6 px-4 text-center bg-primary/5">
+                                    <div class="text-primary text-xl font-bold tracking-tight">GOLD</div>
+                                    <div class="text-[10px] font-mono text-primary/60">ADVANCED</div>
+                                </th>
+                                <th class="py-6 px-4 text-center">
+                                    <div class="text-white text-xl font-bold tracking-tight">IMPERIAL</div>
+                                    <div class="text-[10px] font-mono text-slate-600">MISSION CRITICAL</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20">
+                                <td class="py-6 px-4 text-slate-300 font-medium">Preventative Inspections</td>
+                                <td class="py-6 px-4 text-center text-slate-500">Bi-Annual</td>
+                                <td class="py-6 px-4 text-center text-slate-300 bg-primary/5">Quarterly</td>
+                                <td class="py-6 px-4 text-center text-slate-300">Monthly</td>
+                            </tr>
+                            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20">
+                                <td class="py-6 px-4 text-slate-300 font-medium">Response Time SLA</td>
+                                <td class="py-6 px-4 text-center text-slate-500">24 Hours</td>
+                                <td class="py-6 px-4 text-center text-slate-300 bg-primary/5">8 Hours</td>
+                                <td class="py-6 px-4 text-center text-primary font-bold">2 Hours</td>
+                            </tr>
+                            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20">
+                                <td class="py-6 px-4 text-slate-300 font-medium">IoT Sensor Monitoring</td>
+                                <td class="py-6 px-4 text-center text-slate-500">—</td>
+                                <td class="py-6 px-4 text-center text-slate-300 bg-primary/5">Real-time Alerting</td>
+                                <td class="py-6 px-4 text-center text-slate-300">Predictive AI Analytics</td>
+                            </tr>
+                            <tr class="border-b border-slate-800/50 hover:bg-slate-800/20">
+                                <td class="py-6 px-4 text-slate-300 font-medium">Replacement Parts</td>
+                                <td class="py-6 px-4 text-center text-slate-500">MSRP -10%</td>
+                                <td class="py-6 px-4 text-center text-slate-300 bg-primary/5">MSRP -25%</td>
+                                <td class="py-6 px-4 text-center text-slate-300">Inclusive (Tier 1)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-10 px-4"></td>
+                                <td class="py-10 px-4 text-center">
+                                    <button
+                                        class="w-full py-3 border border-slate-700 hover:border-slate-500 text-xs font-bold uppercase tracking-widest transition-colors">Select
+                                        Tier</button>
+                                </td>
+                                <td class="py-10 px-4 text-center bg-primary/5">
+                                    <button
+                                        class="w-full py-3 bg-primary text-white text-xs font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(0,85,255,0.4)]">Activate
+                                        Gold</button>
+                                </td>
+                                <td class="py-10 px-4 text-center">
+                                    <button
+                                        class="w-full py-3 border border-slate-700 hover:border-slate-500 text-xs font-bold uppercase tracking-widest transition-colors">Contact
+                                        Enterprise</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- Contact/Booking CTA -->
+        <section class="relative py-24 bg-charcoal overflow-hidden">
+            <!-- Airflow Micro-animation simulation lines -->
+            <div class="absolute inset-0 z-0">
+                <div class="airflow-line opacity-10"
+                    style="top: 20%; width: 150%; left: -25%; transform: rotate(-5deg);"></div>
+                <div class="airflow-line opacity-10"
+                    style="top: 50%; width: 150%; left: -25%; transform: rotate(-5deg);"></div>
+                <div class="airflow-line opacity-10"
+                    style="top: 80%; width: 150%; left: -25%; transform: rotate(-5deg);"></div>
+            </div>
+            <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-8 dark:text-white uppercase">
+                    READY TO <span class="text-primary italic">OPTIMIZE</span> YOUR FACILITY?
+                </h2>
+                <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
+                    Speak with our lead engineers today to design a custom HVAC infrastructure that meets the specific
+                    demands of your industrial environment.
+                </p>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <button
+                        class="w-full md:w-auto px-12 py-5 bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-[0.2em] transition-all transform hover:scale-105">
+                        Schedule Consultation
+                    </button>
+                    <button
+                        class="w-full md:w-auto px-12 py-5 border border-slate-700 hover:bg-slate-800 text-white font-bold uppercase tracking-[0.2em] transition-all">
+                        Download Capabilities
+                    </button>
+                </div>
+                <div class="mt-16 flex flex-wrap justify-center gap-12 opacity-40 grayscale">
+                    <span class="font-bold tracking-widest text-xl uppercase">Siemens</span>
+                    <span class="font-bold tracking-widest text-xl uppercase">Honeywell</span>
+                    <span class="font-bold tracking-widest text-xl uppercase">Carrier</span>
+                    <span class="font-bold tracking-widest text-xl uppercase">Trane</span>
+                    <span class="font-bold tracking-widest text-xl uppercase">Daikin</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-background-dark py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Imperial HVAC Logo" class="size-8 object-contain">
+                <h2 class="text-lg font-bold tracking-tighter uppercase dark:text-white">Imperial HVAC</h2>
+            </div>
+            <div class="font-mono text-[10px] text-slate-500 uppercase flex gap-8">
+                <span>© 2024 Imperial Thermal Engineering</span>
+                <a class="hover:text-primary" href="#">Privacy Policy</a>
+                <a class="hover:text-primary" href="#">Technical Documentation</a>
+            </div>
+            <div class="flex gap-4">
+                <a class="size-10 rounded bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">analytics</span>
+                </a>
+                <a class="size-10 rounded bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">hub</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Intersection Observer for Blueprint Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.blueprint-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Interactive Table Tiers
+        document.querySelectorAll('table tbody tr').forEach(row => {
+            const button = row.querySelector('button');
+            if (button) {
+                const originalText = button.innerText;
+                button.addEventListener('mouseenter', () => {
+                    button.innerText = "SCANNING TIER...";
+                    button.classList.add('animate-pulse');
+                    row.classList.add('bg-primary/5');
+                });
+                button.addEventListener('mouseleave', () => {
+                    button.innerText = originalText;
+                    button.classList.remove('animate-pulse');
+                    row.classList.remove('bg-primary/5');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
